@@ -1,0 +1,23 @@
+{
+  "name": "ring-snapshot-proxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.mjs",
+  "scripts": {
+    "setup": "node setup.mjs",
+    "start": "node server.mjs",
+    "list-cameras": "node list-cameras.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "ring-client-api": "^14.2.0"
+  }
+}
