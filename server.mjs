@@ -158,13 +158,26 @@ async function waitForFile(filePath, timeoutMs = 8000) {
 
 async function runFfmpegSingleFrame({ inputUrlOrPath, timeoutMs = 12000 }) {
     return await new Promise((resolve, reject) => {
+        const SEEK_SECONDS = Number(process.env.FRAME_SEEK_SECONDS || "2");
+
         const args = [
             "-hide_banner",
             "-loglevel",
             "error",
             "-y",
+
+            // For live HLS, start from the most recent segment rather than the first one.
+            "-live_start_index",
+            "-1",
+
             "-i",
             inputUrlOrPath,
+
+            // Skip a little into the stream to avoid the initial low-bitrate/unstable frames.
+            // For live inputs this is best-effort.
+            "-ss",
+            String(SEEK_SECONDS),
+
             "-frames:v",
             "1",
             "-f",
@@ -269,6 +282,11 @@ app.get("/ring/frame.jpg", basicAuthMiddleware, async (req, res) => {
 
             // Wait until the playlist exists before invoking ffmpeg
             await waitForFile(m3u8Path, 10000);
+
+            const warmupMs = Number(process.env.FRAME_WARMUP_MS || "2500");
+            if (warmupMs > 0) {
+                await sleep(warmupMs);
+            }
 
             // Extract a single JPEG frame from the stream
             const jpg = await runFfmpegSingleFrame({ inputUrlOrPath: m3u8Path, timeoutMs: 15000 });
