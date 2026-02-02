@@ -4,6 +4,20 @@ Self-hosted adapter that turns a Ring camera into pollable JPEG URLs.
 
 ---
 
+## Acknowledgements
+
+This project is built on top of the excellent open-source work in  
+[`ring-client-api`](https://github.com/dgreif/ring) by @dgreif.
+
+The `ring-client-api` library handles authentication, device discovery,
+and live stream access for Ring devices. This repository focuses on
+exposing those capabilities as simple, pollable HTTP image endpoints
+(e.g. snapshot and single-frame capture) suitable for integrations.
+
+Huge thanks to the maintainers and contributors of `ring-client-api`.
+
+---
+
 ## Endpoints
 
 - GET /ring/snapshot.jpg
